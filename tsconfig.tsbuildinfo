@@ -1,0 +1,1 @@
+{"root":["./src/app.tsx","./src/data.ts","./src/main.tsx","./src/store.tsx","./src/ui.tsx","./src/screens/cart.tsx","./src/screens/localmode.tsx","./src/screens/login.tsx","./src/screens/orders.tsx","./src/screens/plaza.tsx","./src/screens/profile.tsx","./src/screens/storescreen.tsx","./src/screens/voucher.tsx"],"version":"5.6.3"}
