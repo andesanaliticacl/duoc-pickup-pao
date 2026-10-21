@@ -18,7 +18,7 @@ export function BottomNav({ section }: { section: string }) {
   const count = cart.reduce((a, c) => a + c.qty, 0)
   const active = orders.filter(isActive).length
   const items = [
-    { key: '', label: 'Plaza', icon: ICONS.plaza, badge: 0, match: ['', 'tienda'] },
+    { key: '', label: 'Inicio', icon: ICONS.plaza, badge: 0, match: ['', 'tienda'] },
     { key: 'pedidos', label: 'Pedidos', icon: ICONS.pedidos, badge: active, match: ['pedidos', 'voucher'] },
     { key: 'carrito', label: 'Carrito', icon: ICONS.carrito, badge: count, match: ['carrito'] },
     { key: 'perfil', label: 'Perfil', icon: ICONS.perfil, badge: 0, match: ['perfil'] },

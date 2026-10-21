@@ -17,7 +17,7 @@ export default function Login() {
 
   return (
     <div className="login">
-      <img src="/logo.png" alt="Duoc Pick Up PAO" className="login-logo" />
+      <img src="/logo.png" alt="Retira Fácil" className="login-logo" />
       <h1>
         Pide antes,
         <br />

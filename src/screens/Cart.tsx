@@ -35,9 +35,9 @@ export default function Cart() {
       <div className="screen empty">
         <div className="empty-emoji">🛒</div>
         <h2>Tu carrito está vacío</h2>
-        <p className="muted">Date una vuelta por la plaza y elige algo rico.</p>
+        <p className="muted">Date una vuelta por los locales y elige algo rico.</p>
         <button className="btn btn-primary" onClick={() => go('/')}>
-          Ir a la plaza
+          Ver locales
         </button>
       </div>
     )

@@ -12,7 +12,7 @@ function OrderRow({ o }: { o: Order }) {
       <span className="or-text">
         <b>{s?.name}</b>
         <small>
-          PAO-{o.code} · {o.items.reduce((a, i) => a + i.qty, 0)} productos · {hhmm(o.createdAt)}
+          RF-{o.code} · {o.items.reduce((a, i) => a + i.qty, 0)} productos · {hhmm(o.createdAt)}
         </small>
       </span>
       <span className="or-right">

@@ -82,7 +82,7 @@ export default function Profile() {
       >
         Cerrar sesión
       </button>
-      <p className="muted small center">Duoc Pick Up PAO · versión maqueta 0.1</p>
+      <p className="muted small center">Retira Fácil · versión maqueta 0.2</p>
     </div>
   )
 }

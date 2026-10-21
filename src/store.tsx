@@ -26,7 +26,7 @@ export type Pickup = { label: string; at: number }
 
 type Persisted = { user: User | null; cart: CartItem[]; orders: Order[]; autoSim: boolean }
 
-const KEY = 'pao-demo-v1'
+const KEY = 'retira-facil-v1'
 const DEFAULTS: Persisted = { user: null, cart: [], orders: [], autoSim: true }
 
 const load = (): Persisted => {

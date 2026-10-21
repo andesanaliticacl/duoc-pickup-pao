@@ -67,11 +67,11 @@ export default function Voucher({ id }: { id: string }) {
           <StatusPill status={order.status} />
         </div>
         <div className="qr-wrap">
-          <QRCodeSVG value={`PAO:${order.code}`} size={168} fgColor="#14284B" level="M" />
+          <QRCodeSVG value={`RF:${order.code}`} size={168} fgColor="#111111" level="M" />
           {(done || cancelled) && <span className="stamp">{done ? 'RETIRADO' : 'CANCELADO'}</span>}
         </div>
         <div className="code-label">Código de retiro</div>
-        <div className="code">PAO-{order.code}</div>
+        <div className="code">RF-{order.code}</div>
         <div className="ticket-cut" />
         <ul className="t-items">
           {order.items.map((i) => (

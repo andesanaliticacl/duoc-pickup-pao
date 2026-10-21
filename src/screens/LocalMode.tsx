@@ -3,7 +3,7 @@ import { STORES, clp, hhmm, storeById } from '../data'
 import { go, useApp, type Order, type OrderStatus } from '../store'
 import { StatusPill, Toasts } from '../ui'
 
-const normalize = (s: string) => s.toUpperCase().replace(/^PAO[-:\s]?/, '').replace(/[^A-Z0-9]/g, '')
+const normalize = (s: string) => s.toUpperCase().replace(/^(RF|PAO)[-:\s]?/, '').replace(/[^A-Z0-9]/g, '')
 
 const COLUMNS: { status: OrderStatus; title: string; action?: { label: string; next: OrderStatus } }[] = [
   { status: 'recibido', title: 'Nuevos', action: { label: 'Empezar a preparar', next: 'preparando' } },
@@ -16,7 +16,7 @@ function QueueCard({ o, action }: { o: Order; action?: { label: string; next: Or
   return (
     <article className="queue-card">
       <div className="qc-head">
-        <b>PAO-{o.code}</b>
+        <b>RF-{o.code}</b>
         <small>{hhmm(o.createdAt)}</small>
       </div>
       <small className="muted">
@@ -46,14 +46,14 @@ function QueueCard({ o, action }: { o: Order; action?: { label: string; next: Or
 
 export default function LocalMode() {
   const { orders, setStatus, toast } = useApp()
-  const [storeId, setStoreId] = useState(() => sessionStorage.getItem('pao-local') ?? STORES[0].id)
+  const [storeId, setStoreId] = useState(() => sessionStorage.getItem('rf-local') ?? STORES[0].id)
   const [input, setInput] = useState('')
   const [searched, setSearched] = useState('')
   const store = storeById(storeId)!
 
   const pick = (id: string) => {
     setStoreId(id)
-    sessionStorage.setItem('pao-local', id)
+    sessionStorage.setItem('rf-local', id)
     setSearched('')
     setInput('')
   }
@@ -96,7 +96,7 @@ export default function LocalMode() {
           <h2>Validar voucher</h2>
           <p className="muted small">Pide al cliente su código (o escanea el QR) y cobra el total.</p>
           <form onSubmit={validate} className="validate-form">
-            <span className="prefix">PAO-</span>
+            <span className="prefix">RF-</span>
             <input
               value={input}
               onChange={(e) => setInput(e.target.value.toUpperCase())}
@@ -110,14 +110,14 @@ export default function LocalMode() {
             </button>
           </form>
 
-          {searched && !match && <div className="v-result bad">❌ No existe un voucher con el código PAO-{searched}</div>}
+          {searched && !match && <div className="v-result bad">❌ No existe un voucher con el código RF-{searched}</div>}
           {match && match.storeId !== storeId && (
             <div className="v-result bad">⚠️ Este voucher es de {storeById(match.storeId)?.name}, no de este local.</div>
           )}
           {match && match.storeId === storeId && (
             <div className={`v-result ${match.status === 'entregado' || match.status === 'cancelado' ? 'bad' : 'ok'}`}>
               <div className="qc-head">
-                <b>PAO-{match.code}</b>
+                <b>RF-{match.code}</b>
                 <StatusPill status={match.status} />
               </div>
               <small className="muted">
@@ -143,7 +143,7 @@ export default function LocalMode() {
                     className="btn btn-success btn-block"
                     onClick={() => {
                       setStatus(match.id, 'entregado')
-                      toast(`✅ PAO-${match.code} cobrado y entregado`)
+                      toast(`✅ RF-${match.code} cobrado y entregado`)
                       setInput('')
                     }}
                   >

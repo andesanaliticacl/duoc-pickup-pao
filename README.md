@@ -1,4 +1,4 @@
-# Duoc Pick Up PAO — maqueta
+# Retira Fácil — maqueta
 
 App para pedir en las tiendas de la universidad desde la sala de clases y retirar sin hacer fila.
 Esta versión es una **maqueta funcional**: no tiene base de datos, todo se guarda en el navegador (localStorage).
@@ -6,13 +6,13 @@ Esta versión es una **maqueta funcional**: no tiene base de datos, todo se guar
 ## Qué incluye
 
 - **Ingreso** con nombre y correo (sin contraseña, es demo).
-- **Plaza**: mapa ilustrado con los 3 locales y tiempo de espera estimado.
-  - ☕ Cofemarket — café y pan
-  - 🌽 Achoclonados — almuerzos
-  - 🍭 Paraíso — dulces y snacks
+- **Inicio**: patio de comidas visto desde arriba (mesas y sillas, fondo negro) con los 3 locales y su tiempo de espera estimado.
+  - ☕ Cofemarket — café y pan (naranjo)
+  - 🌽 Achoclonados — almuerzos (amarillo)
+  - 🍭 Paraíso — dulces y snacks (rojo)
 - **Menú por local** con categorías y carrito (puede mezclar locales: se genera un voucher por local).
 - **Hora de retiro**: lo antes posible, en 15/30 min o a una hora específica.
-- **Pago en el local** + **voucher** con QR y código `PAO-XXXX`, con seguimiento del estado.
+- **Pago en el local** + **voucher** con QR y código `RF-XXXX`, con seguimiento del estado.
 - **Modo Local** (`/#/local`): vista del personal de la tienda para ver la cola de pedidos,
   marcarlos como "en preparación" / "listo" y **validar el código** al cobrar y entregar.
 

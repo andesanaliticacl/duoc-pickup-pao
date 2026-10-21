@@ -13,7 +13,7 @@ export default function StoreScreen({ id }: { id: string }) {
       <div className="screen empty">
         <p>Este local no existe 🤔</p>
         <button className="btn btn-primary" onClick={() => go('/')}>
-          Volver a la plaza
+          Volver al inicio
         </button>
       </div>
     )
