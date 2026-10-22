@@ -12,7 +12,8 @@ Esta versión es una **maqueta funcional**: no tiene base de datos, todo se guar
   - 🍭 Paraíso — dulces y snacks (rojo)
 - **Menú por local** con categorías y carrito (puede mezclar locales: se genera un voucher por local).
 - **Hora de retiro**: lo antes posible, en 15/30 min o a una hora específica.
-- **Pago en el local** + **voucher** con QR y código `RF-XXXX`, con seguimiento del estado.
+- **Pago**: en la app (simulado, con tarjetas de prueba, no cobra nada) o al retirar en el local.
+- **Voucher** con QR y código `RF-XXXX`, con seguimiento del estado.
 - **Modo Local** (`/#/local`): vista del personal de la tienda para ver la cola de pedidos,
   marcarlos como "en preparación" / "listo" y **validar el código** al cobrar y entregar.
 

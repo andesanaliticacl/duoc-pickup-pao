@@ -21,8 +21,11 @@ export type Order = {
   status: OrderStatus
   history: { status: OrderStatus; at: number }[]
   customer: User
+  paid?: boolean
+  payMethod?: string
 }
 export type Pickup = { label: string; at: number }
+export type Payment = { paid: boolean; method: string }
 
 type Persisted = { user: User | null; cart: CartItem[]; orders: Order[]; autoSim: boolean }
 
@@ -55,7 +58,7 @@ type Ctx = Persisted & {
   addToCart: (productId: string) => void
   setQty: (productId: string, qty: number) => void
   clearCart: () => void
-  placeOrders: (pickup: Pickup, note: string) => Order[]
+  placeOrders: (pickup: Pickup, note: string, payment: Payment) => Order[]
   setStatus: (orderId: string, status: OrderStatus) => void
   setAutoSim: (v: boolean) => void
   resetDemo: () => void
@@ -137,7 +140,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
         cart: qty <= 0 ? s.cart.filter((c) => c.productId !== productId) : s.cart.map((c) => (c.productId === productId ? { ...c, qty } : c)),
       })),
     clearCart: () => setState((s) => ({ ...s, cart: [] })),
-    placeOrders: (pickup, note) => {
+    placeOrders: (pickup, note, payment) => {
       const s = stateRef.current
       if (!s.user) return []
       const taken = new Set(s.orders.map((o) => o.code))
@@ -165,6 +168,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
           status: 'recibido',
           history: [{ status: 'recibido', at: now }],
           customer: s.user,
+          paid: payment.paid,
+          payMethod: payment.method,
         })
       }
       setState((prev) => ({ ...prev, cart: [], orders: [...created, ...prev.orders] }))

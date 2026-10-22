@@ -85,11 +85,12 @@ export default function Voucher({ id }: { id: string }) {
         </ul>
         {order.note && <p className="t-note">📝 {order.note}</p>}
         <div className="t-total">
-          <span>{done ? 'Pagado en el local' : 'A pagar en el local'}</span>
+          <span>{order.paid ? '✅ Pagado en la app' : done ? 'Pagado en el local' : 'A pagar en el local'}</span>
           <b>{clp(order.total)}</b>
         </div>
         <div className="t-meta">
           <span>🕒 Retiro: {order.pickupLabel}</span>
+          {order.paid && <span>💳 {order.payMethod}</span>}
           <span>
             Pedido a las {hhmm(order.createdAt)} · {order.customer.name}
           </span>
@@ -102,7 +103,7 @@ export default function Voucher({ id }: { id: string }) {
           onClick={() => {
             if (confirm('¿Cancelar este pedido?')) {
               setStatus(order.id, 'cancelado')
-              toast('Pedido cancelado')
+              toast(order.paid ? 'Pedido cancelado · reembolso simulado' : 'Pedido cancelado')
             }
           }}
         >

@@ -1,7 +1,13 @@
 import { useState } from 'react'
 import { STORES, clp, hhmm } from '../data'
-import { go, useApp } from '../store'
+import { go, useApp, type Payment } from '../store'
 import { Stepper } from '../ui'
+
+// Tarjetas ficticias para la maqueta (no se ingresan datos reales)
+const CARDS = [
+  { id: 'deb', label: 'Débito', brand: 'DÉBITO', last4: '4242', holder: 'Tarjeta de prueba' },
+  { id: 'cred', label: 'Crédito', brand: 'CRÉDITO', last4: '1881', holder: 'Tarjeta de prueba' },
+]
 
 const OPTIONS = [
   { key: 'asap', label: 'Lo antes posible', min: 0 },
@@ -20,6 +26,9 @@ export default function Cart() {
   const [when, setWhen] = useState('asap')
   const [time, setTime] = useState(defaultTime)
   const [note, setNote] = useState('')
+  const [payMode, setPayMode] = useState<'app' | 'local'>('app')
+  const [cardId, setCardId] = useState(CARDS[0].id)
+  const [sheet, setSheet] = useState<'closed' | 'form' | 'processing' | 'ok'>('closed')
 
   const groups = STORES.map((s) => ({
     store: s,
@@ -42,7 +51,7 @@ export default function Cart() {
       </div>
     )
 
-  const confirm = () => {
+  const computePickup = () => {
     const opt = OPTIONS.find((o) => o.key === when)!
     let at: number
     let label: string
@@ -59,12 +68,29 @@ export default function Cart() {
       at = Date.now() + opt.min * 60000
       label = `${opt.label} (${hhmm(at)})`
     }
-    const created = placeOrders({ label, at }, note.trim())
+    return { label, at }
+  }
+
+  const finish = (payment: Payment) => {
+    const created = placeOrders(computePickup(), note.trim(), payment)
     if (created.length === 1) go('/voucher/' + created[0].id)
     else {
       toast(`🎟️ ${created.length} vouchers generados`)
       go('/pedidos')
     }
+  }
+
+  const confirm = () => {
+    if (payMode === 'local') finish({ paid: false, method: 'En el local' })
+    else setSheet('form')
+  }
+
+  // Pago simulado: no se conecta a ninguna pasarela ni se cobra nada
+  const payNow = () => {
+    const card = CARDS.find((c) => c.id === cardId)!
+    setSheet('processing')
+    setTimeout(() => setSheet('ok'), 1600)
+    setTimeout(() => finish({ paid: true, method: `${card.label} •••• ${card.last4}` }), 2600)
   }
 
   return (
@@ -117,23 +143,93 @@ export default function Cart() {
         <textarea placeholder="Comentario para el local (opcional): sin azúcar, sin cebolla…" value={note} onChange={(e) => setNote(e.target.value)} rows={2} />
       </section>
 
-      <section className="card pay-card">
-        <span className="pay-icon">💵</span>
-        <div>
-          <b>Pagas al retirar en el local</b>
-          <p className="muted small">Efectivo, débito o crédito. Muestra tu código en caja y listo.</p>
+      <section className="card">
+        <h3 className="card-title">¿Cómo pagas?</h3>
+        <div className="pay-options">
+          <button className={payMode === 'app' ? 'pay-opt on' : 'pay-opt'} onClick={() => setPayMode('app')}>
+            <span className="pay-icon">💳</span>
+            <span>
+              <b>Pagar ahora en la app</b>
+              <small>Débito o crédito. Llegas y retiras directo.</small>
+            </span>
+            <span className="radio" />
+          </button>
+          <button className={payMode === 'local' ? 'pay-opt on' : 'pay-opt'} onClick={() => setPayMode('local')}>
+            <span className="pay-icon">💵</span>
+            <span>
+              <b>Pagar al retirar en el local</b>
+              <small>Efectivo, débito o crédito en caja.</small>
+            </span>
+            <span className="radio" />
+          </button>
         </div>
       </section>
 
       <div className="checkout-bar">
         <div>
-          <small>Total · pagas en el local</small>
+          <small>{payMode === 'app' ? 'Total · pagas en la app' : 'Total · pagas en el local'}</small>
           <b>{clp(total)}</b>
         </div>
         <button className="btn btn-primary" onClick={confirm}>
-          Confirmar pedido
+          {payMode === 'app' ? 'Ir a pagar' : 'Confirmar pedido'}
         </button>
       </div>
+
+      {sheet !== 'closed' && (
+        <div className="sheet-backdrop" onClick={() => sheet === 'form' && setSheet('closed')}>
+          <div className="sheet" onClick={(e) => e.stopPropagation()}>
+            {sheet === 'form' && (
+              <>
+                <div className="sheet-grip" />
+                <div className="demo-badge">MODO DEMO · no se realiza ningún cobro</div>
+                <h2>Pagar {clp(total)}</h2>
+                <p className="muted small">Elige un medio de pago</p>
+                <div className="pay-options">
+                  {CARDS.map((c) => (
+                    <button key={c.id} className={cardId === c.id ? 'pay-opt on' : 'pay-opt'} onClick={() => setCardId(c.id)}>
+                      <span className={`mini-card ${c.id}`}>{c.brand}</span>
+                      <span>
+                        <b>
+                          {c.label} •••• {c.last4}
+                        </b>
+                        <small>{c.holder}</small>
+                      </span>
+                      <span className="radio" />
+                    </button>
+                  ))}
+                  <button className="pay-opt add-card" onClick={() => toast('En la versión real podrás agregar tus tarjetas')}>
+                    <span className="pay-icon">＋</span>
+                    <span>
+                      <b>Agregar tarjeta</b>
+                      <small>Disponible en la versión real</small>
+                    </span>
+                  </button>
+                </div>
+                <button className="btn btn-primary btn-block" onClick={payNow}>
+                  Pagar {clp(total)}
+                </button>
+                <button className="btn btn-ghost btn-block" onClick={() => setSheet('closed')}>
+                  Cancelar
+                </button>
+              </>
+            )}
+            {sheet === 'processing' && (
+              <div className="pay-status">
+                <span className="spinner" />
+                <h2>Procesando pago…</h2>
+                <p className="muted small">Simulación, no se cobra nada</p>
+              </div>
+            )}
+            {sheet === 'ok' && (
+              <div className="pay-status">
+                <span className="pay-ok">✓</span>
+                <h2>¡Pago aprobado!</h2>
+                <p className="muted small">Generando tu voucher…</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

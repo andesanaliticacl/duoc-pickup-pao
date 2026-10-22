@@ -374,3 +374,45 @@ textarea { resize: none; font-size: 14px; }
 @keyframes slideUp { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
 @keyframes slideDown { from { transform: translateY(-12px); opacity: 0; } to { transform: none; opacity: 1; } }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+
+/* ---------- Pago en la app (simulado) ---------- */
+.pay-options { display: grid; gap: 8px; }
+.pay-opt {
+  display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 12px; border-radius: 14px;
+  background: var(--surface-2); border: 1.5px solid var(--line); transition: border-color 0.15s, background 0.15s;
+}
+.pay-opt > span:nth-child(2) { flex: 1; display: grid; gap: 2px; }
+.pay-opt small { color: var(--muted); }
+.pay-opt.on { border-color: var(--orange); background: rgba(255, 122, 26, 0.08); }
+.pay-opt .pay-icon { font-size: 26px; width: 44px; text-align: center; }
+.radio { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #55555c; flex: none; display: grid; place-items: center; }
+.pay-opt.on .radio { border-color: var(--orange); }
+.pay-opt.on .radio::after { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--orange); }
+.add-card { border-style: dashed; opacity: 0.75; }
+.mini-card {
+  width: 44px; height: 30px; border-radius: 6px; flex: none; display: grid; place-items: end start; padding: 3px 4px;
+  font-size: 6.5px; font-weight: 800; letter-spacing: 0.3px; color: #fff;
+}
+.mini-card.deb { background: linear-gradient(135deg, #ff7a1a, #e8262d); }
+.mini-card.cred { background: linear-gradient(135deg, #3a3a42, #17171a); border: 1px solid #ffc21a; color: var(--yellow); }
+
+.sheet-backdrop { position: fixed; inset: 0; z-index: 60; background: rgba(0, 0, 0, 0.65); display: flex; align-items: flex-end; justify-content: center; animation: fade 0.2s; }
+.sheet {
+  width: min(440px, 100%); background: var(--surface); border: 1px solid var(--line); border-bottom: 0; border-radius: 24px 24px 0 0;
+  padding: 10px 16px calc(20px + env(safe-area-inset-bottom)); display: grid; gap: 10px; animation: sheetUp 0.25s ease-out;
+}
+.sheet h2 { font-size: 26px; }
+.sheet .btn-ghost { margin-top: 0; }
+.sheet-grip { width: 40px; height: 4px; border-radius: 4px; background: #44444b; margin: 0 auto 4px; }
+.demo-badge { justify-self: start; background: rgba(255, 194, 26, 0.14); color: var(--yellow); border: 1px dashed rgba(255, 194, 26, 0.5); font-size: 11px; font-weight: 800; letter-spacing: 0.4px; padding: 4px 10px; border-radius: 99px; }
+.pay-status { display: grid; justify-items: center; gap: 8px; padding: 36px 0 28px; text-align: center; }
+.spinner { width: 54px; height: 54px; border-radius: 50%; border: 5px solid var(--line); border-top-color: var(--orange); animation: spin 0.8s linear infinite; }
+.pay-ok { width: 64px; height: 64px; border-radius: 50%; background: var(--green); color: #fff; font-size: 34px; font-weight: 800; display: grid; place-items: center; animation: pop 0.3s ease-out; }
+
+.paid-tag, .unpaid-tag { font-family: 'Inter'; font-size: 10px; font-weight: 800; padding: 2px 6px; border-radius: 6px; margin-left: 4px; vertical-align: middle; }
+.paid-tag { background: rgba(43, 182, 115, 0.2); color: #4fd28f; }
+.unpaid-tag { background: rgba(255, 194, 26, 0.18); color: var(--yellow); }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fade { from { opacity: 0; } }
+@keyframes sheetUp { from { transform: translateY(40px); opacity: 0; } }

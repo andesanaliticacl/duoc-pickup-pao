@@ -31,7 +31,7 @@ function QueueCard({ o, action }: { o: Order; action?: { label: string; next: Or
       </ul>
       {o.note && <p className="t-note">📝 {o.note}</p>}
       <div className="qc-foot">
-        <b>{clp(o.total)}</b>
+        <b>{clp(o.total)} {o.paid ? <span className="paid-tag">PAGADO</span> : <span className="unpaid-tag">COBRAR</span>}</b>
         {action ? (
           <button className="btn btn-sm btn-primary" onClick={() => setStatus(o.id, action.next)}>
             {action.label}
@@ -143,11 +143,11 @@ export default function LocalMode() {
                     className="btn btn-success btn-block"
                     onClick={() => {
                       setStatus(match.id, 'entregado')
-                      toast(`✅ RF-${match.code} cobrado y entregado`)
+                      toast(match.paid ? `✅ RF-${match.code} entregado` : `✅ RF-${match.code} cobrado y entregado`)
                       setInput('')
                     }}
                   >
-                    Cobrar {clp(match.total)} y entregar
+                    {match.paid ? 'Ya pagado en la app · Entregar' : `Cobrar ${clp(match.total)} y entregar`}
                   </button>
                 </>
               )}
